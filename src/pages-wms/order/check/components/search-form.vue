@@ -20,7 +20,7 @@
         <wd-input v-model="formData.no" placeholder="请输入盘库单号" clearable />
       </view>
       <yd-search-picker v-model="formData.status" label="单据状态" :dict-type="DICT_TYPE.WMS_ORDER_STATUS" all-option />
-      <WarehousePicker v-model="formData.warehouseId" label="仓库" placeholder="请选择仓库" />
+      <WarehouseSearchPicker ref="warehousePickerRef" v-model="formData.warehouseId" label="仓库" placeholder="请选择仓库" />
       <yd-search-date-range v-model="formData.orderTime" label="单据日期" />
       <view class="yd-search-form-actions">
         <wd-button class="flex-1" variant="plain" @click="handleReset">
@@ -38,7 +38,7 @@
 import { computed, reactive, ref } from 'vue'
 import { getDictLabel } from '@/hooks/useDict'
 import { getTopPopupModalStyle, getTopPopupStyle } from '@/utils'
-import WarehousePicker from '@/pages-wms/components/warehouse-picker.vue'
+import WarehouseSearchPicker from '@/pages-wms/md/warehouse/components/warehouse-search-picker.vue'
 import { DICT_TYPE } from '@/utils/constants'
 import { formatDate, formatDateRange } from '@/utils/date'
 
@@ -48,6 +48,7 @@ const emit = defineEmits<{
 }>()
 
 const visible = ref(false) // 搜索弹窗显示状态
+const warehousePickerRef = ref<InstanceType<typeof WarehouseSearchPicker>>()
 const formData = reactive({
   no: undefined as string | undefined,
   status: undefined as number | undefined,
@@ -61,11 +62,11 @@ const placeholder = computed(() => {
   if (formData.no) {
     conditions.push(`单号:${formData.no}`)
   }
-  if (formData.status !== undefined && formData.status !== -1) {
+  if (formData.status !== undefined) {
     conditions.push(`状态:${getDictLabel(DICT_TYPE.WMS_ORDER_STATUS, formData.status)}`)
   }
   if (formData.warehouseId) {
-    conditions.push('已选仓库')
+    conditions.push(`仓库:${warehousePickerRef.value?.format(formData.warehouseId) || formData.warehouseId}`)
   }
   if (formData.orderTime?.[0] && formData.orderTime?.[1]) {
     conditions.push(`日期:${formatDate(formData.orderTime[0])}~${formatDate(formData.orderTime[1])}`)
@@ -73,17 +74,11 @@ const placeholder = computed(() => {
   return conditions.length > 0 ? conditions.join(' | ') : '搜索盘库单'
 })
 
-/** 清理全部选项值 */
-function cleanPickerValue(value?: number) {
-  return value === -1 ? undefined : value
-}
-
 /** 搜索按钮操作 */
 function handleSearch() {
   visible.value = false
   emit('search', {
     ...formData,
-    status: cleanPickerValue(formData.status),
     orderTime: formatDateRange(formData.orderTime),
   })
 }

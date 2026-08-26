@@ -19,40 +19,22 @@
         </view>
         <wd-input v-model="formData.code" placeholder="请输入报工单号" clearable />
       </view>
-      <yd-search-picker v-model="formData.type" label="报工类型" :dict-type="DICT_TYPE.MES_PRO_FEEDBACK_TYPE" all-option :all-value="undefined" />
-      <view class="yd-search-form-item">
-        <view class="yd-search-form-label">
-          生产工单
-        </view>
-        <view class="rounded-8rpx bg-[#f7f8fa] px-20rpx py-18rpx text-28rpx text-[#333]" @click="workOrderSelectorRef?.open(formData.workOrderId)">
-          {{ selectedWorkOrderName || '请选择工单' }}
-        </view>
-      </view>
-      <view class="yd-search-form-item">
-        <view class="yd-search-form-label">
-          产品物料
-        </view>
-        <view class="rounded-8rpx bg-[#f7f8fa] px-20rpx py-18rpx text-28rpx text-[#333]" @click="itemSelectorRef?.open()">
-          {{ selectedItemName || '请选择产品物料' }}
-        </view>
-      </view>
-      <UserPicker
-        ref="feedbackUserPickerRef"
+      <yd-search-picker v-model="formData.type" label="报工类型" :dict-type="DICT_TYPE.MES_PRO_FEEDBACK_TYPE" all-option />
+      <WorkOrderSearchPicker ref="workOrderSearchPickerRef" v-model="formData.workOrderId" label="生产工单" placeholder="请选择工单" />
+      <ItemSearchPicker ref="itemSearchPickerRef" v-model="formData.itemId" label="产品物料" placeholder="请选择产品物料" item-or-product="PRODUCT" title="选择产品物料" />
+      <UserSearchPicker
+        ref="feedbackUserSearchPickerRef"
         v-model="formData.feedbackUserId"
         label="报工人"
-        label-width="180rpx"
-        type="radio"
         placeholder="请选择报工人"
       />
-      <UserPicker
+      <UserSearchPicker
         ref="creatorPickerRef"
         v-model="formData.creator"
         label="记录人"
-        label-width="180rpx"
-        type="radio"
         placeholder="请选择记录人"
       />
-      <yd-search-picker v-model="formData.status" label="状态" :dict-type="DICT_TYPE.MES_PRO_FEEDBACK_STATUS" all-option :all-value="undefined" />
+      <yd-search-picker v-model="formData.status" label="状态" :dict-type="DICT_TYPE.MES_PRO_FEEDBACK_STATUS" all-option />
       <yd-search-date-range v-model="formData.feedbackTime" label="报工时间" />
       <view class="yd-search-form-actions">
         <wd-button class="flex-1" variant="plain" @click="handleReset">
@@ -64,31 +46,28 @@
       </view>
     </view>
   </wd-popup>
-
-  <WorkOrderSelector ref="workOrderSelectorRef" @confirm="handleWorkOrderConfirm" />
-  <ItemSelector ref="itemSelectorRef" title="选择产品物料" :multiple="false" @confirm="handleItemConfirm" />
 </template>
 
 <script lang="ts" setup>
-import type { ProFeedbackQueryParams } from '@/api/mes/pro/feedback'
-import type { MdItemVO } from '@/api/mes/md/item'
-import type { ProWorkOrderVO } from '@/api/mes/pro/workorder'
 import { computed, reactive, ref } from 'vue'
-import UserPicker from '@/components/system-select/user-picker.vue'
+import UserSearchPicker from '@/components/system-select/user-search-picker.vue'
 import { getDictLabel } from '@/hooks/useDict'
 import { getTopPopupModalStyle, getTopPopupStyle } from '@/utils'
 import { DICT_TYPE } from '@/utils/constants'
 import { formatDateRange } from '@/utils/date'
-import ItemSelector from '../../../md/item/components/item-selector.vue'
-import WorkOrderSelector from '../../card/components/workorder-selector.vue'
+import ItemSearchPicker from '@/pages-mes/md/item/components/item-search-picker.vue'
+import WorkOrderSearchPicker from '@/pages-mes/pro/workorder/components/workorder-search-picker.vue'
 
 const emit = defineEmits<{
-  search: [data: Partial<ProFeedbackQueryParams>]
+  search: [data: Record<string, any>]
   reset: []
 }>()
 
+type DateRangeValue = [number | undefined, number | undefined]
+const defaultFeedbackTime: DateRangeValue = [undefined, undefined]
+
 const visible = ref(false) // 搜索弹窗显示状态
-const formData = reactive<Partial<ProFeedbackQueryParams>>({
+const formData = reactive<Record<string, any>>({
   code: undefined,
   type: undefined,
   workOrderId: undefined,
@@ -96,14 +75,12 @@ const formData = reactive<Partial<ProFeedbackQueryParams>>({
   feedbackUserId: undefined,
   creator: undefined,
   status: undefined,
-  feedbackTime: undefined,
+  feedbackTime: defaultFeedbackTime,
 }) // 搜索表单数据
-const selectedWorkOrderName = ref('') // 已选工单展示
-const selectedItemName = ref('') // 已选物料展示
-const workOrderSelectorRef = ref<InstanceType<typeof WorkOrderSelector>>() // 工单选择器引用
-const itemSelectorRef = ref<InstanceType<typeof ItemSelector>>() // 物料选择器引用
-const feedbackUserPickerRef = ref<InstanceType<typeof UserPicker>>() // 报工人选择器引用
-const creatorPickerRef = ref<InstanceType<typeof UserPicker>>() // 记录人选择器引用
+const workOrderSearchPickerRef = ref<InstanceType<typeof WorkOrderSearchPicker>>() // 工单搜索选择器
+const itemSearchPickerRef = ref<InstanceType<typeof ItemSearchPicker>>() // 物料搜索选择器
+const feedbackUserSearchPickerRef = ref<InstanceType<typeof UserSearchPicker>>() // 报工人选择器引用
+const creatorPickerRef = ref<InstanceType<typeof UserSearchPicker>>() // 记录人选择器引用
 
 /** 搜索条件 placeholder 拼接 */
 const placeholder = computed(() => {
@@ -115,17 +92,17 @@ const placeholder = computed(() => {
     conditions.push(`类型:${getDictLabel(DICT_TYPE.MES_PRO_FEEDBACK_TYPE, formData.type) || formData.type}`)
   }
   if (formData.workOrderId) {
-    conditions.push(`工单:${selectedWorkOrderName.value || formData.workOrderId}`)
+    conditions.push(`工单:${workOrderSearchPickerRef.value?.format(formData.workOrderId) || formData.workOrderId}`)
   }
   if (formData.itemId) {
-    conditions.push(`物料:${selectedItemName.value || formData.itemId}`)
+    conditions.push(`物料:${itemSearchPickerRef.value?.format(formData.itemId) || formData.itemId}`)
   }
   if (formData.feedbackUserId) {
-    const nickname = feedbackUserPickerRef.value?.getUserNickname(formData.feedbackUserId)
+    const nickname = feedbackUserSearchPickerRef.value?.format(formData.feedbackUserId)
     conditions.push(`报工人:${nickname || formData.feedbackUserId}`)
   }
   if (formData.creator) {
-    const nickname = creatorPickerRef.value?.getUserNickname(formData.creator)
+    const nickname = creatorPickerRef.value?.format(formData.creator)
     conditions.push(`记录人:${nickname || formData.creator}`)
   }
   if (formData.status != null) {
@@ -134,24 +111,13 @@ const placeholder = computed(() => {
   return conditions.length > 0 ? conditions.join(' | ') : '搜索生产报工'
 })
 
-/** 确认工单 */
-function handleWorkOrderConfirm(item: ProWorkOrderVO) {
-  formData.workOrderId = item.id
-  selectedWorkOrderName.value = item.code || item.name || `工单 #${item.id}`
-}
-
-/** 确认物料 */
-function handleItemConfirm(items: MdItemVO[]) {
-  const item = items[0]
-  formData.itemId = item?.id
-  selectedItemName.value = item ? `${item.code || '-'} / ${item.name || '-'}` : ''
-}
-
 /** 搜索按钮操作 */
 function handleSearch() {
   visible.value = false
   emit('search', {
     ...formData,
+    type: formData.type,
+    status: formData.status,
     feedbackTime: formatDateRange(formData.feedbackTime),
   })
 }
@@ -165,9 +131,7 @@ function handleReset() {
   formData.feedbackUserId = undefined
   formData.creator = undefined
   formData.status = undefined
-  formData.feedbackTime = undefined
-  selectedWorkOrderName.value = ''
-  selectedItemName.value = ''
+  formData.feedbackTime = [undefined, undefined]
   visible.value = false
   emit('reset')
 }

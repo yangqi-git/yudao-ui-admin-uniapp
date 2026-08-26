@@ -1213,6 +1213,22 @@
               "permission": "crm:statistics-performance:query"
             },
             {
+              "key": "crmStatisticsProduct",
+              "name": "产品分析",
+              "icon": "dashboard",
+              "iconColor": "#2f54eb",
+              "url": "/pages-statistics/crm/product/index",
+              "permission": "crm:statistics-product:query"
+            },
+            {
+              "key": "crmStatisticsPerformanceTarget",
+              "name": "业绩达成",
+              "icon": "dashboard",
+              "iconColor": "#13c2c2",
+              "url": "/pages-statistics/crm/performance-target/index",
+              "permission": "crm:statistics-performance-target:query"
+            },
+            {
               "key": "crmStatisticsPortrait",
               "name": "客户画像",
               "icon": "dashboard",
@@ -1273,6 +1289,14 @@
               "iconColor": "#ffc53d",
               "url": "/pages-crm/contract/config/index",
               "permission": "crm:contract-config:query"
+            },
+            {
+              "key": "crmPerformanceConfig",
+              "name": "业绩目标设置",
+              "icon": "settings",
+              "iconColor": "#73d13d",
+              "url": "/pages-crm/performance/config/index",
+              "permission": "crm:performance-config:query"
             }
           ]
         }
@@ -1282,6 +1306,20 @@
       "key": "erp",
       "name": "ERP 系统",
       "subGroups": [
+        {
+          "key": "overview",
+          "name": "概览",
+          "menus": [
+            {
+              "key": "erpHome",
+              "name": "ERP 首页",
+              "icon": "dashboard",
+              "iconColor": "#1677ff",
+              "url": "/pages-statistics/erp/home/index",
+              "permission": "erp:statistics:query"
+            }
+          ]
+        },
         {
           "key": "product",
           "name": "产品管理",
@@ -1495,7 +1533,7 @@
               "name": "MES 工作台",
               "icon": "dashboard",
               "iconColor": "#1677ff",
-              "url": "/pages-mes/home/index"
+              "url": "/pages-statistics/mes/home/index"
             },
             {
               "key": "mesMdAutocode",
@@ -1630,14 +1668,6 @@
               "iconColor": "#fa8c16",
               "url": "/pages-mes/pro/andon/record/index",
               "permission": "mes:pro-andon-record:query"
-            },
-            {
-              "key": "mesProAndonConfig",
-              "name": "安灯配置",
-              "icon": "settings",
-              "iconColor": "#faad14",
-              "url": "/pages-mes/pro/andon/config/index",
-              "permission": "mes:pro-andon-config:query"
             }
           ]
         },
@@ -1827,22 +1857,6 @@
               "icon": "home",
               "iconColor": "#fa8c16",
               "url": "/pages-mes/wm/warehouse/index",
-              "permission": "mes:wm-warehouse:query"
-            },
-            {
-              "key": "mesWmWarehouseArea",
-              "name": "库区管理",
-              "icon": "folder",
-              "iconColor": "#faad14",
-              "url": "/pages-mes/wm/warehouse/area/index",
-              "permission": "mes:wm-warehouse:query"
-            },
-            {
-              "key": "mesWmWarehouseLocation",
-              "name": "库位管理",
-              "icon": "location",
-              "iconColor": "#13c2c2",
-              "url": "/pages-mes/wm/warehouse/location/index",
               "permission": "mes:wm-warehouse:query"
             }
           ]
@@ -2059,10 +2073,10 @@
           "menus": [
             {
               "key": "wmsHome",
-              "name": "WMS 工作台",
+              "name": "WMS 首页",
               "icon": "dashboard",
               "iconColor": "#1677ff",
-              "url": "/pages-wms/home/index",
+              "url": "/pages-statistics/wms/home/index",
               "permission": "wms:home:query"
             }
           ]
@@ -2176,6 +2190,612 @@
       ]
     },
     {
+      "key": "hrm",
+      "name": "HRM 人力资源",
+      "subGroups": [
+        {
+          "key": "overview",
+          "name": "工作台",
+          "menus": [
+            {
+              "key": "hrmHrHome",
+              "name": "HR 工作台",
+              "icon": "dashboard",
+              "iconColor": "#1677ff",
+              "url": "/pages-statistics/hrm/hr/index",
+              "permission": "hrm:home:hr-query"
+            },
+            {
+              "key": "hrmTeamHome",
+              "name": "团队工作台",
+              "icon": "dashboard",
+              "iconColor": "#52c41a",
+              "url": "/pages-statistics/hrm/team/index",
+              "permission": "hrm:home:team-query"
+            }
+          ]
+        },
+        {
+          "key": "org",
+          "name": "组织管理",
+          "menus": [
+            {
+              "key": "hrmDept",
+              "name": "组织管理",
+              "icon": "organization",
+              "iconColor": "#13c2c2",
+              "url": "/pages-hrm/dept/index",
+              "permission": "hrm:employee:query"
+            }
+          ]
+        },
+        {
+          "key": "recruit",
+          "name": "招聘管理",
+          "menus": [
+            {
+              "key": "hrmRecruitCandidate",
+              "name": "候选人",
+              "icon": "user",
+              "iconColor": "#1677ff",
+              "url": "/pages-hrm/recruit/candidate/index",
+              "permission": "hrm:recruit:candidate:query"
+            },
+            {
+              "key": "hrmRecruitPost",
+              "name": "招聘职位",
+              "icon": "idcard",
+              "iconColor": "#13c2c2",
+              "url": "/pages-hrm/recruit/post/index",
+              "permission": "hrm:recruit:post:query"
+            },
+            {
+              "key": "hrmRecruitChannel",
+              "name": "招聘渠道",
+              "icon": "share-alt",
+              "iconColor": "#722ed1",
+              "url": "/pages-hrm/recruit/channel/index",
+              "permission": "hrm:recruit:channel:query"
+            },
+            {
+              "key": "hrmRecruitEliminateReason",
+              "name": "淘汰原因",
+              "icon": "exclamation-circle",
+              "iconColor": "#f5222d",
+              "url": "/pages-hrm/recruit/config/eliminate/index",
+              "permission": "hrm:recruit:config:query"
+            }
+          ]
+        },
+        {
+          "key": "employee",
+          "name": "员工管理",
+          "menus": [
+            {
+              "key": "hrmEmployee",
+              "name": "员工档案",
+              "icon": "user",
+              "iconColor": "#1677ff",
+              "url": "/pages-hrm/employee/index",
+              "permission": "hrm:employee:query"
+            },
+            {
+              "key": "hrmEmployeeConfig",
+              "name": "员工设置",
+              "icon": "settings",
+              "iconColor": "#722ed1",
+              "url": "/pages-hrm/employee/config/index",
+              "permission": "hrm:employee:config:query"
+            }
+          ]
+        },
+        {
+          "key": "attendance",
+          "name": "考勤管理",
+          "menus": [
+            {
+              "key": "hrmAttendanceClock",
+              "name": "打卡记录",
+              "icon": "clock-circle",
+              "iconColor": "#1677ff",
+              "url": "/pages-hrm/attendance/clock/index",
+              "permission": "hrm:attendance:clock:query"
+            },
+            {
+              "key": "hrmAttendanceLeave",
+              "name": "请假记录",
+              "icon": "calendar-line",
+              "iconColor": "#13c2c2",
+              "url": "/pages-hrm/attendance/leave/index",
+              "permission": "hrm:attendance:leave:query"
+            },
+            {
+              "key": "hrmAttendanceStatistics",
+              "name": "月度汇总",
+              "icon": "dashboard",
+              "iconColor": "#722ed1",
+              "url": "/pages-hrm/attendance/statistics/index",
+              "permission": "hrm:attendance:statistics:query"
+            },
+            {
+              "key": "hrmAttendanceGroup",
+              "name": "考勤组设置",
+              "icon": "user-group",
+              "iconColor": "#1677ff",
+              "url": "/pages-hrm/attendance/config/group/index",
+              "permission": "hrm:attendance:group:query"
+            },
+            {
+              "key": "hrmAttendanceHoliday",
+              "name": "节假日设置",
+              "icon": "calendar-line",
+              "iconColor": "#fa8c16",
+              "url": "/pages-hrm/attendance/config/holiday/index",
+              "permission": "hrm:attendance:holiday:query"
+            }
+          ]
+        },
+        {
+          "key": "insurance",
+          "name": "社保管理",
+          "menus": [
+            {
+              "key": "hrmInsuranceMonthRecord",
+              "name": "社保表",
+              "icon": "safe",
+              "iconColor": "#fa8c16",
+              "url": "/pages-hrm/insurance/month-record/index",
+              "permission": "hrm:insurance:month-record:query"
+            },
+            {
+              "key": "hrmInsuranceScheme",
+              "name": "社保方案",
+              "icon": "safe",
+              "iconColor": "#1677ff",
+              "url": "/pages-hrm/insurance/scheme/index",
+              "permission": "hrm:insurance:scheme:query"
+            }
+          ]
+        },
+        {
+          "key": "salary",
+          "name": "薪资管理",
+          "menus": [
+            {
+              "key": "hrmSalaryMonthRecord",
+              "name": "月度工资表",
+              "icon": "dashboard",
+              "iconColor": "#52c41a",
+              "url": "/pages-hrm/salary/month-record/index",
+              "permission": "hrm:salary:month-record:query"
+            },
+            {
+              "key": "hrmSalaryHistory",
+              "name": "历史工资表",
+              "icon": "history",
+              "iconColor": "#13c2c2",
+              "url": "/pages-hrm/salary/history/index",
+              "permission": "hrm:salary:month-record:query"
+            },
+            {
+              "key": "hrmSalaryEmployeeInfo",
+              "name": "薪资档案",
+              "icon": "user",
+              "iconColor": "#1677ff",
+              "url": "/pages-hrm/salary/employee-info/index",
+              "permission": "hrm:salary:employee-info:query"
+            },
+            {
+              "key": "hrmSalarySlipSendRecord",
+              "name": "发放记录",
+              "icon": "send",
+              "iconColor": "#722ed1",
+              "url": "/pages-hrm/salary/slip/send-record/index",
+              "permission": "hrm:salary:slip:query"
+            },
+            {
+              "key": "hrmSalaryGroup",
+              "name": "薪资组设置",
+              "icon": "user-group",
+              "iconColor": "#1677ff",
+              "url": "/pages-hrm/salary/config/group/index",
+              "permission": "hrm:salary:group:query"
+            },
+            {
+              "key": "hrmSalaryTaxRule",
+              "name": "计税规则",
+              "icon": "edit",
+              "iconColor": "#fa8c16",
+              "url": "/pages-hrm/salary/config/tax-rule/index",
+              "permission": "hrm:salary:tax-rule:query"
+            },
+            {
+              "key": "hrmSalaryPayConfig",
+              "name": "计薪设置",
+              "icon": "calendar-line",
+              "iconColor": "#13c2c2",
+              "url": "/pages-hrm/salary/config/config/index",
+              "permission": "hrm:salary:config:query"
+            },
+            {
+              "key": "hrmSalaryOption",
+              "name": "工资表设置",
+              "icon": "list",
+              "iconColor": "#52c41a",
+              "url": "/pages-hrm/salary/config/option/index",
+              "permission": "hrm:salary:option:query"
+            },
+            {
+              "key": "hrmSalaryChangeTemplate",
+              "name": "调薪模板",
+              "icon": "file",
+              "iconColor": "#eb2f96",
+              "url": "/pages-hrm/salary/config/change-template/index",
+              "permission": "hrm:salary:change-template:query"
+            }
+          ]
+        },
+        {
+          "key": "performance",
+          "name": "绩效管理",
+          "menus": [
+            {
+              "key": "hrmPerformancePlan",
+              "name": "KPI 考核",
+              "icon": "trophy",
+              "iconColor": "#1677ff",
+              "url": "/pages-hrm/performance/plan/index",
+              "permission": "hrm:performance:plan:query"
+            },
+            {
+              "key": "hrmPerformanceArchive",
+              "name": "绩效档案",
+              "icon": "folder",
+              "iconColor": "#13c2c2",
+              "url": "/pages-hrm/performance/assessment/index",
+              "permission": "hrm:performance:archive:query"
+            },
+            {
+              "key": "hrmPerformanceAssessmentTemplate",
+              "name": "考核指标模板",
+              "icon": "apps",
+              "iconColor": "#722ed1",
+              "url": "/pages-hrm/performance/config/assessment-template/index",
+              "permission": "hrm:performance:assessment-template:query"
+            },
+            {
+              "key": "hrmPerformanceResultTemplate",
+              "name": "考核结果设置",
+              "icon": "star",
+              "iconColor": "#eb2f96",
+              "url": "/pages-hrm/performance/config/result-template/index",
+              "permission": "hrm:performance:result-template:query"
+            }
+          ]
+        },
+        {
+          "key": "portal",
+          "name": "HRM 员工端",
+          "menus": [
+            {
+              "key": "hrmPortalHome",
+              "name": "个人工作台",
+              "icon": "dashboard",
+              "iconColor": "#722ed1",
+              "url": "/pages-hrm/portal/home/index",
+              "permission": "hrm:portal:query"
+            },
+            {
+              "key": "hrmPortalEmployee",
+              "name": "我的档案",
+              "icon": "user",
+              "iconColor": "#1677ff",
+              "url": "/pages-hrm/portal/employee/index",
+              "permission": "hrm:portal:query"
+            },
+            {
+              "key": "hrmPortalInsurance",
+              "name": "我的社保",
+              "icon": "safe",
+              "iconColor": "#13c2c2",
+              "url": "/pages-hrm/portal/insurance/index",
+              "permission": "hrm:portal:query"
+            },
+            {
+              "key": "hrmPortalSalarySlip",
+              "name": "我的工资条",
+              "icon": "list",
+              "iconColor": "#fa8c16",
+              "url": "/pages-hrm/portal/salary/slip/index",
+              "permission": "hrm:portal:query"
+            },
+            {
+              "key": "hrmPortalAttendanceClock",
+              "name": "打卡",
+              "icon": "location",
+              "iconColor": "#1677ff",
+              "url": "/pages-hrm/portal/attendance/clock/index",
+              "permission": "hrm:portal:query"
+            },
+            {
+              "key": "hrmPortalAttendanceReport",
+              "name": "考勤报表",
+              "icon": "calendar-line",
+              "iconColor": "#eb2f96",
+              "url": "/pages-hrm/portal/attendance/report/index",
+              "permission": "hrm:portal:query"
+            },
+            {
+              "key": "hrmPortalPerformanceAssessment",
+              "name": "KPI 考核",
+              "icon": "trophy",
+              "iconColor": "#1677ff",
+              "url": "/pages-hrm/portal/performance/assessment/index",
+              "permission": "hrm:portal:query"
+            },
+            {
+              "key": "hrmPortalPerformanceHistory",
+              "name": "我的绩效档案",
+              "icon": "folder",
+              "iconColor": "#13c2c2",
+              "url": "/pages-hrm/portal/performance/history/index",
+              "permission": "hrm:portal:query"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "fms",
+      "name": "FMS 财务管理",
+      "subGroups": [
+        {
+          "key": "overview",
+          "name": "工作台",
+          "menus": [
+            {
+              "key": "fmsHome",
+              "name": "首页",
+              "icon": "dashboard",
+              "iconColor": "#1677ff",
+              "url": "/pages-statistics/fms/home/index",
+              "permission": "fms:home:query"
+            }
+          ]
+        },
+        {
+          "key": "voucher",
+          "name": "凭证管理",
+          "menus": [
+            {
+              "key": "fmsVoucherCreate",
+              "name": "录凭证",
+              "icon": "edit",
+              "iconColor": "#52c41a",
+              "url": "/pages-fms/voucher/create/index",
+              "permission": "fms:voucher:create"
+            },
+            {
+              "key": "fmsVoucherList",
+              "name": "查凭证",
+              "icon": "file",
+              "iconColor": "#1677ff",
+              "url": "/pages-fms/voucher/list/index",
+              "permission": "fms:voucher:query"
+            },
+            {
+              "key": "fmsVoucherStatistics",
+              "name": "凭证汇总表",
+              "icon": "dashboard",
+              "iconColor": "#fa8c16",
+              "url": "/pages-fms/voucher/statistics/index",
+              "permission": "fms:voucher:statistics:query"
+            }
+          ]
+        },
+        {
+          "key": "ledger",
+          "name": "账簿管理",
+          "menus": [
+            {
+              "key": "fmsLedgerDetail",
+              "name": "明细账",
+              "icon": "list",
+              "iconColor": "#1677ff",
+              "url": "/pages-fms/ledger/detail/index",
+              "permission": "fms:ledger:detail:query"
+            },
+            {
+              "key": "fmsLedgerGeneral",
+              "name": "总账",
+              "icon": "list",
+              "iconColor": "#52c41a",
+              "url": "/pages-fms/ledger/general/index",
+              "permission": "fms:ledger:general:query"
+            },
+            {
+              "key": "fmsLedgerSubjectBalance",
+              "name": "科目余额表",
+              "icon": "dashboard",
+              "iconColor": "#fa8c16",
+              "url": "/pages-fms/ledger/subject-balance/index",
+              "permission": "fms:ledger:subject-balance:query"
+            },
+            {
+              "key": "fmsLedgerMultiColumn",
+              "name": "多栏账",
+              "icon": "layout",
+              "iconColor": "#722ed1",
+              "url": "/pages-fms/ledger/multi-column/index",
+              "permission": "fms:ledger:multi-column:query"
+            },
+            {
+              "key": "fmsLedgerAuxiliaryDetail",
+              "name": "核算项目明细账",
+              "icon": "apps",
+              "iconColor": "#13c2c2",
+              "url": "/pages-fms/ledger/auxiliary-detail/index",
+              "permission": "fms:ledger:detail:query"
+            },
+            {
+              "key": "fmsLedgerAuxiliaryBalance",
+              "name": "核算项目余额表",
+              "icon": "apps",
+              "iconColor": "#eb2f96",
+              "url": "/pages-fms/ledger/auxiliary-balance/index",
+              "permission": "fms:ledger:subject-balance:query"
+            },
+            {
+              "key": "fmsLedgerQuantityDetail",
+              "name": "数量金额明细账",
+              "icon": "ordered-list",
+              "iconColor": "#1677ff",
+              "url": "/pages-fms/ledger/quantity-detail/index",
+              "permission": "fms:ledger:detail:query"
+            },
+            {
+              "key": "fmsLedgerQuantityGeneral",
+              "name": "数量金额总账",
+              "icon": "ordered-list",
+              "iconColor": "#52c41a",
+              "url": "/pages-fms/ledger/quantity-general/index",
+              "permission": "fms:ledger:general:query"
+            }
+          ]
+        },
+        {
+          "key": "report",
+          "name": "报表管理",
+          "menus": [
+            {
+              "key": "fmsReportBalanceSheet",
+              "name": "资产负债表",
+              "icon": "book",
+              "iconColor": "#1677ff",
+              "url": "/pages-fms/report/balance-sheet/index",
+              "permission": "fms:report:balance-sheet:query"
+            },
+            {
+              "key": "fmsReportIncomeStatement",
+              "name": "利润表",
+              "icon": "book",
+              "iconColor": "#52c41a",
+              "url": "/pages-fms/report/income-statement/index",
+              "permission": "fms:report:income-statement:query"
+            },
+            {
+              "key": "fmsReportCashFlowStatement",
+              "name": "现金流量表",
+              "icon": "book",
+              "iconColor": "#fa8c16",
+              "url": "/pages-fms/report/cash-flow-statement/index",
+              "permission": "fms:report:cash-flow-statement:query"
+            }
+          ]
+        },
+        {
+          "key": "closing",
+          "name": "结账管理",
+          "menus": [
+            {
+              "key": "fmsClosing",
+              "name": "结账",
+              "icon": "check-circle",
+              "iconColor": "#722ed1",
+              "url": "/pages-fms/closing/index",
+              "permission": "fms:closing:query"
+            }
+          ]
+        },
+        {
+          "key": "config",
+          "name": "设置管理",
+          "menus": [
+            {
+              "key": "fmsSubject",
+              "name": "科目设置",
+              "icon": "book",
+              "iconColor": "#1677ff",
+              "url": "/pages-fms/config/subject/index",
+              "permission": "fms:config:subject:query"
+            },
+            {
+              "key": "fmsVoucherWord",
+              "name": "凭证字",
+              "icon": "file",
+              "iconColor": "#13c2c2",
+              "url": "/pages-fms/config/voucher-word/index",
+              "permission": "fms:config:voucher-word:query"
+            },
+            {
+              "key": "fmsDigest",
+              "name": "常用摘要",
+              "icon": "list",
+              "iconColor": "#eb2f96",
+              "url": "/pages-fms/config/digest/index",
+              "permission": "fms:config:digest:query"
+            },
+            {
+              "key": "fmsCurrency",
+              "name": "币别",
+              "icon": "swap",
+              "iconColor": "#52c41a",
+              "url": "/pages-fms/config/currency/index",
+              "permission": "fms:config:currency:query"
+            },
+            {
+              "key": "fmsInitialBalance",
+              "name": "财务初始余额",
+              "icon": "storage",
+              "iconColor": "#fa8c16",
+              "url": "/pages-fms/config/initial-balance/index",
+              "permission": "fms:config:initial-balance:query"
+            },
+            {
+              "key": "fmsFinanceParameter",
+              "name": "财务参数",
+              "icon": "settings",
+              "iconColor": "#722ed1",
+              "url": "/pages-fms/config/finance-parameter/index",
+              "permission": "fms:config:finance-parameter:query"
+            },
+            {
+              "key": "fmsAuxiliary",
+              "name": "辅助核算",
+              "icon": "apps",
+              "iconColor": "#13c2c2",
+              "url": "/pages-fms/config/auxiliary/index",
+              "permission": "fms:config:auxiliary:query"
+            },
+            {
+              "key": "fmsAccountSet",
+              "name": "账套管理",
+              "icon": "organization",
+              "iconColor": "#1677ff",
+              "url": "/pages-fms/config/account-set/index",
+              "permission": "fms:config:account-set:query"
+            },
+            {
+              "key": "fmsVoucherTemplate",
+              "name": "凭证模板",
+              "icon": "copy",
+              "iconColor": "#722ed1",
+              "url": "/pages-fms/config/voucher-template/index",
+              "permission": "fms:config:voucher-template:query"
+            },
+            {
+              "key": "fmsFinanceIndicator",
+              "name": "财务指标",
+              "icon": "dashboard",
+              "iconColor": "#fa8c16",
+              "url": "/pages-fms/config/finance-indicator/index",
+              "permission": "fms:config:finance-indicator:query"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "key": "ai",
       "name": "AI 大模型",
       "subGroups": [
@@ -2183,13 +2803,6 @@
           "key": "tools",
           "name": "AI 工具",
           "menus": [
-            {
-              "key": "aiWorkbench",
-              "name": "AI 工作台",
-              "icon": "message",
-              "iconColor": "#1677ff",
-              "url": "/pages-ai/index/index"
-            },
             {
               "key": "aiChat",
               "name": "AI 对话",
@@ -2205,13 +2818,6 @@
               "url": "/pages-ai/image/index"
             },
             {
-              "key": "aiMusic",
-              "name": "AI 音乐",
-              "icon": "sound",
-              "iconColor": "#f5222d",
-              "url": "/pages-ai/music/index"
-            },
-            {
               "key": "aiWrite",
               "name": "AI 写作",
               "icon": "edit",
@@ -2219,29 +2825,15 @@
               "url": "/pages-ai/write/index"
             },
             {
-              "key": "aiMindMap",
-              "name": "思维导图",
-              "icon": "share-alt",
-              "iconColor": "#52c41a",
-              "url": "/pages-ai/mindmap/index"
-            }
-          ]
-        },
-        {
-          "key": "config",
-          "name": "配置与数据",
-          "menus": [
-            {
-              "key": "aiModel",
-              "name": "模型配置",
-              "icon": "settings",
-              "iconColor": "#eb2f96",
-              "url": "/pages-ai/model/index",
-              "permission": "ai:model:query"
+              "key": "aiMusic",
+              "name": "AI 音乐",
+              "icon": "sound",
+              "iconColor": "#f5222d",
+              "url": "/pages-ai/music/index"
             },
             {
               "key": "aiKnowledge",
-              "name": "知识库",
+              "name": "AI 知识库",
               "icon": "folder",
               "iconColor": "#2f54eb",
               "url": "/pages-ai/knowledge/index",
@@ -2256,11 +2848,89 @@
               "permission": "ai:workflow:query"
             },
             {
-              "key": "aiContent",
-              "name": "生成记录",
-              "icon": "list",
+              "key": "aiMindMap",
+              "name": "思维导图",
+              "icon": "share-alt",
+              "iconColor": "#52c41a",
+              "url": "/pages-ai/mindmap/index"
+            }
+          ]
+        },
+        {
+          "key": "console",
+          "name": "控制台",
+          "menus": [
+            {
+              "key": "aiApiKey",
+              "name": "API 密钥",
+              "icon": "lock",
+              "iconColor": "#1677ff",
+              "url": "/pages-ai/model/apiKey/index",
+              "permission": "ai:api-key:query"
+            },
+            {
+              "key": "aiModelConfig",
+              "name": "模型配置",
+              "icon": "settings",
+              "iconColor": "#13c2c2",
+              "url": "/pages-ai/model/model/index",
+              "permission": "ai:model:query"
+            },
+            {
+              "key": "aiChatRole",
+              "name": "聊天角色",
+              "icon": "user",
+              "iconColor": "#722ed1",
+              "url": "/pages-ai/model/chatRole/index",
+              "permission": "ai:chat-role:query"
+            },
+            {
+              "key": "aiTool",
+              "name": "工具管理",
+              "icon": "tool",
+              "iconColor": "#fa8c16",
+              "url": "/pages-ai/model/tool/index",
+              "permission": "ai:tool:query"
+            },
+            {
+              "key": "aiChatManager",
+              "name": "聊天管理",
+              "icon": "message",
+              "iconColor": "#2f54eb",
+              "url": "/pages-ai/chat/manager/index",
+              "permission": "ai:chat-conversation:query"
+            },
+            {
+              "key": "aiImageManager",
+              "name": "绘图管理",
+              "icon": "image",
+              "iconColor": "#eb2f96",
+              "url": "/pages-ai/image/manager/index",
+              "permission": "ai:image:query"
+            },
+            {
+              "key": "aiMusicManager",
+              "name": "音乐管理",
+              "icon": "sound",
+              "iconColor": "#f5222d",
+              "url": "/pages-ai/music/manager/index",
+              "permission": "ai:music:query"
+            },
+            {
+              "key": "aiWriteManager",
+              "name": "写作管理",
+              "icon": "edit",
               "iconColor": "#faad14",
-              "url": "/pages-ai/content/index"
+              "url": "/pages-ai/write/manager/index",
+              "permission": "ai:write:query"
+            },
+            {
+              "key": "aiMindMapManager",
+              "name": "导图管理",
+              "icon": "share-alt",
+              "iconColor": "#52c41a",
+              "url": "/pages-ai/mindmap/manager/index",
+              "permission": "ai:mind-map:query"
             }
           ]
         }
@@ -2279,7 +2949,7 @@
               "name": "IoT 首页",
               "icon": "dashboard",
               "iconColor": "#1677ff",
-              "url": "/pages-iot/home/index"
+              "url": "/pages-statistics/iot/home/index"
             }
           ]
         },
@@ -2339,23 +3009,21 @@
               "icon": "sound",
               "iconColor": "#5cdbd3",
               "url": "/pages-iot/rule/scene/index",
-              "permission": "iot:scene-rule:query"
+              "permissions": [
+                "iot:scene-rule:query",
+                "iot:rule-scene:query"
+              ]
             },
             {
-              "key": "iotDataSink",
-              "name": "数据流转目的",
+              "key": "iotDataFlow",
+              "name": "数据流转",
               "icon": "link",
               "iconColor": "#eb2f96",
-              "url": "/pages-iot/rule/data/sink/index",
-              "permission": "iot:data-sink:query"
-            },
-            {
-              "key": "iotDataRule",
-              "name": "数据流转规则",
-              "icon": "code",
-              "iconColor": "#f759ab",
-              "url": "/pages-iot/rule/data/rule/index",
-              "permission": "iot:data-rule:query"
+              "url": "/pages-iot/rule/data/index",
+              "permissions": [
+                "iot:data-sink:query",
+                "iot:data-rule:query"
+              ]
             }
           ]
         },
@@ -2392,14 +3060,6 @@
               "iconColor": "#faad14",
               "url": "/pages-iot/ota/firmware/index",
               "permission": "iot:ota-firmware:query"
-            },
-            {
-              "key": "iotOtaTask",
-              "name": "OTA 任务",
-              "icon": "clock-circle",
-              "iconColor": "#ffc53d",
-              "url": "/pages-iot/ota/task/index",
-              "permission": "iot:ota-task:query"
             }
           ]
         }
@@ -2418,20 +3078,13 @@
               "name": "聊天",
               "icon": "message",
               "iconColor": "#1677ff",
-              "url": "/pages-im/home/index/index"
-            },
-            {
-              "key": "imStatistics",
-              "name": "数据统计",
-              "icon": "dashboard",
-              "iconColor": "#722ed1",
-              "url": "/pages-statistics/im/index"
+              "url": "/pages-im/home/conversation/index"
             }
           ]
         },
         {
           "key": "friend",
-          "name": "好友",
+          "name": "好友管理",
           "menus": [
             {
               "key": "imFriend",
@@ -2458,7 +3111,7 @@
         },
         {
           "key": "group",
-          "name": "群聊",
+          "name": "群聊管理",
           "menus": [
             {
               "key": "imGroup",
@@ -2485,7 +3138,7 @@
         },
         {
           "key": "channel",
-          "name": "频道",
+          "name": "频道管理",
           "menus": [
             {
               "key": "imChannel",
@@ -2512,8 +3165,15 @@
         },
         {
           "key": "other",
-          "name": "通话与内容",
+          "name": "其他管理",
           "menus": [
+            {
+              "key": "imStatistics",
+              "name": "数据统计",
+              "icon": "dashboard",
+              "iconColor": "#722ed1",
+              "url": "/pages-statistics/im/index"
+            },
             {
               "key": "imRtc",
               "name": "通话记录",

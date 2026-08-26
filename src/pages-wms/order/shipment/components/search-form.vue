@@ -26,8 +26,9 @@
         <wd-input v-model="formData.bizOrderNo" placeholder="请输入业务单号" clearable />
       </view>
       <yd-search-picker v-model="formData.status" label="单据状态" :dict-type="DICT_TYPE.WMS_ORDER_STATUS" all-option />
-      <WarehousePicker v-model="formData.warehouseId" label="仓库" placeholder="请选择仓库" />
-      <MerchantPicker
+      <WarehouseSearchPicker ref="warehousePickerRef" v-model="formData.warehouseId" label="仓库" placeholder="请选择仓库" />
+      <MerchantSearchPicker
+        ref="merchantPickerRef"
         v-model="formData.merchantId"
         label="客户"
         placeholder="请选择客户"
@@ -51,8 +52,8 @@
 import { computed, reactive, ref } from 'vue'
 import { getDictLabel } from '@/hooks/useDict'
 import { getTopPopupModalStyle, getTopPopupStyle } from '@/utils'
-import MerchantPicker from '@/pages-wms/components/merchant-picker.vue'
-import WarehousePicker from '@/pages-wms/components/warehouse-picker.vue'
+import MerchantSearchPicker from '@/pages-wms/md/merchant/components/merchant-search-picker.vue'
+import WarehouseSearchPicker from '@/pages-wms/md/warehouse/components/warehouse-search-picker.vue'
 import { DICT_TYPE } from '@/utils/constants'
 import { formatDate, formatDateRange } from '@/utils/date'
 
@@ -62,6 +63,8 @@ const emit = defineEmits<{
 }>()
 
 const visible = ref(false) // 搜索弹窗显示状态
+const warehousePickerRef = ref<InstanceType<typeof WarehouseSearchPicker>>()
+const merchantPickerRef = ref<InstanceType<typeof MerchantSearchPicker>>()
 const formData = reactive({
   no: undefined as string | undefined,
   bizOrderNo: undefined as string | undefined,
@@ -81,36 +84,29 @@ const placeholder = computed(() => {
   if (formData.bizOrderNo) {
     conditions.push(`业务:${formData.bizOrderNo}`)
   }
-  if (formData.status !== undefined && formData.status !== -1) {
+  if (formData.status !== undefined) {
     conditions.push(`状态:${getDictLabel(DICT_TYPE.WMS_ORDER_STATUS, formData.status)}`)
   }
   if (formData.warehouseId) {
-    conditions.push('已选仓库')
+    conditions.push(`仓库:${warehousePickerRef.value?.format(formData.warehouseId) || formData.warehouseId}`)
   }
   if (formData.merchantId) {
-    conditions.push('已选客户')
+    conditions.push(`客户:${merchantPickerRef.value?.format(formData.merchantId) || formData.merchantId}`)
   }
   if (formData.orderTime?.[0] && formData.orderTime?.[1]) {
     conditions.push(`日期:${formatDate(formData.orderTime[0])}~${formatDate(formData.orderTime[1])}`)
   }
-  if (formData.type !== undefined && formData.type !== -1) {
+  if (formData.type !== undefined) {
     conditions.push(`类型:${getDictLabel(DICT_TYPE.WMS_SHIPMENT_ORDER_TYPE, formData.type)}`)
   }
   return conditions.length > 0 ? conditions.join(' | ') : '搜索出库单'
 })
-
-/** 清理全部选项值 */
-function cleanPickerValue(value?: number) {
-  return value === -1 ? undefined : value
-}
 
 /** 搜索按钮操作 */
 function handleSearch() {
   visible.value = false
   emit('search', {
     ...formData,
-    status: cleanPickerValue(formData.status),
-    type: cleanPickerValue(formData.type),
     orderTime: formatDateRange(formData.orderTime),
   })
 }

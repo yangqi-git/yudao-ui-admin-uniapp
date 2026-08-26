@@ -37,21 +37,20 @@
 </template>
 
 <script lang="ts" setup>
-import type { MdItemTypeQueryParams } from '@/api/mes/md/item/type'
 import { computed, reactive, ref } from 'vue'
-import { getIntDictOptions } from '@/hooks/useDict'
-import { DICT_TYPE } from '@/utils/constants'
+import { getDictLabel } from '@/hooks/useDict'
 import { getTopPopupModalStyle, getTopPopupStyle } from '@/utils'
+import { DICT_TYPE } from '@/utils/constants'
 
 const emit = defineEmits<{
-  search: [data: MdItemTypeQueryParams]
+  search: [data: Record<string, any>]
   reset: []
 }>()
 
 const visible = ref(false) // 搜索弹窗显示状态
 const formData = reactive({
-  name: '',
-  status: -1,
+  name: undefined as string | undefined,
+  status: undefined,
 }) // 搜索表单数据
 
 /** 搜索条件 placeholder 拼接 */
@@ -60,9 +59,8 @@ const placeholder = computed(() => {
   if (formData.name) {
     conditions.push(`分类名称:${formData.name}`)
   }
-  if (formData.status !== -1) {
-    const label = getIntDictOptions(DICT_TYPE.COMMON_STATUS).find(d => d.value === formData.status)?.label
-    conditions.push(`状态:${label || formData.status}`)
+  if (formData.status !== undefined) {
+    conditions.push(`状态:${getDictLabel(DICT_TYPE.COMMON_STATUS, formData.status)}`)
   }
   return conditions.length > 0 ? conditions.join(' | ') : '搜索物料产品分类'
 })
@@ -70,27 +68,17 @@ const placeholder = computed(() => {
 /** 搜索按钮操作 */
 function handleSearch() {
   visible.value = false
-  const params: MdItemTypeQueryParams = {}
-  if (formData.name)
-    params.name = formData.name
-  if (formData.status !== -1)
-    params.status = formData.status
-  emit('search', params)
+  emit('search', {
+    name: formData.name || undefined,
+    status: formData.status,
+  })
 }
 
 /** 重置按钮操作 */
 function handleReset() {
-  formData.name = ''
-  formData.status = -1
+  formData.name = undefined
+  formData.status = undefined
   visible.value = false
   emit('reset')
 }
-
-/** 供外部调用重置 */
-function resetFields() {
-  formData.name = ''
-  formData.status = -1
-}
-
-defineExpose({ resetFields })
 </script>

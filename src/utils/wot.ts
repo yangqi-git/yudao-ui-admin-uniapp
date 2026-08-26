@@ -1,6 +1,6 @@
 import type { FormSchema, FormSchemaIssue } from '@wot-ui/ui/components/wd-form/types'
 import { isEmail, isMobile } from '@/utils/validator'
-import { isEmptyValue } from '@/utils/is'
+import { isEmptyValue, isRecord } from '@/utils/is'
 
 // ==================== 表单校验 ====================
 
@@ -139,7 +139,7 @@ function isFormRuleArray(rules: WotFormRule | readonly WotFormRule[]): rules is 
 
 // ==================== Picker 选择器 ====================
 
-export type WotPickerValue = number | string
+export type WotPickerValue = boolean | number | string
 
 export interface WotPickerDisplayOptions {
   labelKey?: string // 展示文本字段名，默认读取 label
@@ -150,11 +150,16 @@ export interface WotPickerDisplayOptions {
 /** 获取 picker 在 wd-form-item 上展示的 value；未选择时返回空字符串以触发 placeholder 样式 */
 export function getWotPickerFormValue(
   columns: unknown[],
-  value?: null | WotPickerValue,
+  value?: null | WotPickerValue | WotPickerValue[],
   options: WotPickerDisplayOptions = {},
 ) {
   if (value === undefined || value === null || value === '') {
     return ''
+  }
+  if (Array.isArray(value)) {
+    return value.length > 0
+      ? value.map(item => getWotPickerDisplay(columns, item, options)).filter(Boolean).join('、')
+      : ''
   }
   return getWotPickerDisplay(columns, value, options)
 }
@@ -190,7 +195,7 @@ export function getWotPickerDisplay(
   const list = Array.isArray(firstColumn) ? firstColumn : columns
   const selected = list.find((item) => {
     // 选项可以是对象，也可以是直接的字符串/数字值。
-    const itemValue = isWotPickerObject(item) ? item[valueKey] : item
+    const itemValue = isRecord(item) ? item[valueKey] : item
     return itemValue === value || String(itemValue) === String(value)
   })
 
@@ -198,12 +203,13 @@ export function getWotPickerDisplay(
   if (selected === undefined) {
     return String(value)
   }
-  if (!isWotPickerObject(selected)) {
+  if (!isRecord(selected)) {
     return String(selected)
   }
   return String(selected[labelKey] ?? selected[valueKey] ?? placeholder)
 }
 
-function isWotPickerObject(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null
+/** 判断一维对象选项是否包含 boolean 值 */
+export function hasWotPickerBooleanValue(columns: Record<string, any>[], valueKey = 'value') {
+  return columns.some(item => typeof item[valueKey] === 'boolean')
 }

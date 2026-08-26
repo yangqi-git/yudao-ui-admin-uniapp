@@ -14,7 +14,7 @@
   >
     <view class="yd-search-form-container">
       <yd-search-picker v-model="formData.type" label="统计维度" :columns="typeOptions" />
-      <WarehousePicker v-model="formData.warehouseId" label="仓库" placeholder="请选择仓库" />
+      <WarehouseSearchPicker ref="warehousePickerRef" v-model="formData.warehouseId" label="仓库" placeholder="请选择仓库" />
       <view class="yd-search-form-item">
         <view class="yd-search-form-label">
           商品名称
@@ -61,7 +61,7 @@
 
 <script lang="ts" setup>
 import { computed, reactive, ref } from 'vue'
-import WarehousePicker from '@/pages-wms/components/warehouse-picker.vue'
+import WarehouseSearchPicker from '@/pages-wms/md/warehouse/components/warehouse-search-picker.vue'
 import { getTopPopupModalStyle, getTopPopupStyle } from '@/utils'
 
 const emit = defineEmits<{
@@ -70,12 +70,14 @@ const emit = defineEmits<{
 }>()
 
 const visible = ref(false) // 搜索弹窗显示状态
+const warehousePickerRef = ref<InstanceType<typeof WarehouseSearchPicker>>()
 const typeOptions = [
   { label: '仓库', value: 'warehouse' },
   { label: '商品', value: 'item' },
 ] // 统计维度选项
+const defaultType = typeOptions[0].value // 默认统计维度
 const formData = reactive({
-  type: 'warehouse',
+  type: defaultType,
   warehouseId: undefined as number | undefined,
   itemName: undefined as string | undefined,
   itemCode: undefined as string | undefined,
@@ -87,9 +89,9 @@ const formData = reactive({
 /** 搜索条件 placeholder 拼接 */
 const placeholder = computed(() => {
   const conditions: string[] = []
-  conditions.push(formData.type === 'item' ? '维度:商品' : '维度:仓库')
+  conditions.push(formData.type === typeOptions[1].value ? '维度:商品' : '维度:仓库')
   if (formData.warehouseId) {
-    conditions.push('已选仓库')
+    conditions.push(`仓库:${warehousePickerRef.value?.format(formData.warehouseId) || formData.warehouseId}`)
   }
   if (formData.itemName) {
     conditions.push(`商品:${formData.itemName}`)
@@ -120,7 +122,7 @@ function handleSearch() {
 
 /** 重置按钮操作 */
 function handleReset() {
-  formData.type = 'warehouse'
+  formData.type = defaultType
   formData.warehouseId = undefined
   formData.itemName = undefined
   formData.itemCode = undefined

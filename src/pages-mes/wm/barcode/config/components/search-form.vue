@@ -13,8 +13,8 @@
     @close="visible = false"
   >
     <view class="yd-search-form-container">
-      <yd-search-picker v-model="formData.format" label="条码格式" :dict-type="DICT_TYPE.MES_WM_BARCODE_FORMAT" all-option :all-value="undefined" />
-      <yd-search-picker v-model="formData.bizType" label="业务类型" :dict-type="DICT_TYPE.MES_WM_BARCODE_BIZ_TYPE" all-option :all-value="undefined" />
+      <yd-search-picker v-model="formData.format" label="条码格式" :dict-type="DICT_TYPE.MES_WM_BARCODE_FORMAT" all-option />
+      <yd-search-picker v-model="formData.bizType" label="业务类型" :dict-type="DICT_TYPE.MES_WM_BARCODE_BIZ_TYPE" all-option />
       <view class="yd-search-form-actions">
         <wd-button class="flex-1" variant="plain" @click="handleReset">
           重置
@@ -28,7 +28,6 @@
 </template>
 
 <script lang="ts" setup>
-import type { WmBarcodeConfigQueryParams } from '@/api/mes/wm/barcode/config'
 import { computed, reactive, ref } from 'vue'
 import { getDictLabel } from '@/hooks/useDict'
 import { getTopPopupModalStyle, getTopPopupStyle } from '@/utils'
@@ -40,7 +39,7 @@ interface SearchFormData {
 }
 
 const emit = defineEmits<{
-  search: [data: WmBarcodeConfigQueryParams]
+  search: [data: Record<string, any>]
   reset: []
 }>()
 
@@ -61,20 +60,13 @@ const placeholder = computed(() => { // 搜索条件摘要
   return conditions.length > 0 ? conditions.join(' | ') : '搜索条码配置'
 })
 
-/** 构造搜索参数 */
-function buildSearchParams(): WmBarcodeConfigQueryParams {
-  return {
-    pageNo: 1,
-    pageSize: 10,
-    format: formData.format,
-    bizType: formData.bizType,
-  }
-}
-
 /** 搜索按钮操作 */
 function handleSearch() {
   visible.value = false
-  emit('search', buildSearchParams())
+  emit('search', {
+    format: formData.format,
+    bizType: formData.bizType,
+  })
 }
 
 /** 重置按钮操作 */
